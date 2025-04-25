@@ -73,3 +73,5 @@ ios/
 # web
 web/
 expo/
+
+dist/
