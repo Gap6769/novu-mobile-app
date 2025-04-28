@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl, ImageBackground, Animated, TouchableOpacity, Dimensions } from 'react-native';
 import { Text, Card, Button, ActivityIndicator, IconButton, Menu, Chip, Divider, Badge, Portal, Snackbar, Modal } from 'react-native-paper';
-import { useNovel, useChapters, useDeleteNovel, useFetchChapters } from '../api/contentApi';
+import { useNovel, useChapters, useDeleteNovel, useFetchChapters } from '../api/services/content';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

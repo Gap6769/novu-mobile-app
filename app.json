@@ -1,32 +1,33 @@
 {
   "expo": {
-    "name": "WebNovel Manager",
-    "slug": "webnovel-manager",
+    "name": "novu-mobile-app",
+    "slug": "novu-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-square.png",
+    "icon": "./src/assets/novuSquareIcon.png",
     "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#2a2a2a"
+      "image": "./src/assets/novuLogoFull.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1a1a"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.webnovelmanager.app"
+      "bundleIdentifier": "com.novu.app"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon-square.png",
-        "backgroundColor": "#2a2a2a"
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#1a1a1a"
       },
-      "package": "com.webnovelmanager.app"
+      "package": "com.novu.app"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./src/assets/favicon.png"
     },
     "fonts": [
       "assets/fonts/gothampro.ttf",

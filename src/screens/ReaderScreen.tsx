@@ -17,7 +17,7 @@ import {
 import { WebView } from 'react-native-webview';
 import { Text, IconButton, ActivityIndicator, useTheme, Menu, ProgressBar, Snackbar } from 'react-native-paper';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
-import { useChapter, useNovel, useReadingProgress, useUpdateReadingProgress } from '../api/contentApi';
+import { useChapter, useNovel, useReadingProgress, useUpdateReadingProgress } from '../api/services/content';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import RenderHtml from 'react-native-render-html';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

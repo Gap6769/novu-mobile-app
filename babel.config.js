@@ -12,6 +12,19 @@ module.exports = function (api) {
         "allowUndefined": true
       }],
       'react-native-reanimated/plugin',
+      [
+        'module-resolver',
+        {
+          root: ['./src'],
+          alias: {
+            '@assets': './src/assets',
+            '@components': './src/components',
+            '@screens': './src/screens',
+            '@api': './src/api',
+            '@utils': './src/utils',
+          },
+        },
+      ],
     ]
   };
 }; 

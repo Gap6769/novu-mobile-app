@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, Switch, Divider, List, Surface, IconButton } from 'react-native-paper';
+import { Text, Switch, Divider, List, Surface, IconButton, Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuthContext } from '../contexts';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '../types/navigation';
 
 interface SettingsState {
   darkMode: boolean;
@@ -11,8 +14,10 @@ interface SettingsState {
   compactView: boolean;
 }
 
-const SettingsScreen = ({ navigation }) => {
+const SettingsScreen = () => {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NavigationProp>();
+  const { logout } = useAuthContext();
   const [settings, setSettings] = useState<SettingsState>({
     darkMode: true,
     autoDownload: false,
@@ -26,6 +31,15 @@ const SettingsScreen = ({ navigation }) => {
       ...prev,
       [key]: !prev[key]
     }));
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
@@ -123,6 +137,18 @@ const SettingsScreen = ({ navigation }) => {
             left={props => <List.Icon {...props} icon="information" />}
           />
         </Surface>
+
+        <Surface style={styles.section}>
+          <Text style={styles.sectionTitle}>Account</Text>
+          <Button
+            mode="contained"
+            onPress={handleLogout}
+            style={styles.logoutButton}
+            textColor="#fff"
+          >
+            Logout
+          </Button>
+        </Surface>
       </ScrollView>
     </View>
   );
@@ -163,6 +189,10 @@ const styles = StyleSheet.create({
   },
   divider: {
     backgroundColor: '#404040',
+  },
+  logoutButton: {
+    margin: 16,
+    backgroundColor: '#ff4444',
   },
 });
 

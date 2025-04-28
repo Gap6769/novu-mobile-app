@@ -1,14 +1,7 @@
-import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { API_CONFIG, API_ENDPOINTS } from './config';
-import { Novel, Chapter } from './types';
-
-// Configuración de axios con timeout aumentado
-const api = axios.create({
-  ...API_CONFIG,
-  timeout: 30000, // 30 segundos
-  timeoutErrorMessage: 'Request timed out. Please check your connection and try again.',
-});
+import { API_ENDPOINTS } from '../../config/config';
+import { api } from '../../config/axios';
+import { Novel, Chapter } from '../../../types/api';
 
 // Hooks para novelas
 export const useNovels = () => {
@@ -42,7 +35,7 @@ export const useCreateNovel = () => {
       source_language: string;
       type: 'novel' | 'manhwa';
     }) => {
-      const response = await api.post('/api/v1/novels/', novelData);
+      const response = await api.post(API_ENDPOINTS.NOVELS, novelData);
       return response.data;
     },
     onSuccess: () => {
@@ -68,7 +61,7 @@ export const useUpdateNovel = () => {
       description?: string;
       tags?: string[];
     }) => {
-      const response = await api.patch(`/api/v1/novels/${id}`, novelData);
+      const response = await api.patch(`${API_ENDPOINTS.NOVELS}/${id}`, novelData);
       return response.data;
     },
     onSuccess: (_, { id }) => {
@@ -126,23 +119,19 @@ export const useChapter = (novelId: string, chapterNumber: number) => {
     queryKey: ['chapter', novelId, chapterNumber],
     queryFn: async () => {
       try {
-        // if the novel is shadow slave use language es in params
         const response = await api.get(
           `${API_ENDPOINTS.CHAPTERS.replace(':novelId', novelId)}/${chapterNumber}?format=raw&language=es`
         );
         return response.data as ChapterContent;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.code === 'ECONNABORTED') {
-            throw new Error('Request timed out. Please check your connection and try again.');
-          }
-          throw new Error(error.response?.data?.message || error.message);
+        if (error.code === 'ECONNABORTED') {
+          throw new Error('Request timed out. Please check your connection and try again.');
         }
         throw error;
       }
     },
-    retry: 1, // Intentar 2 veces más en caso de error
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000), // Retry con backoff exponencial
+    retry: 1,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 };
 
@@ -151,17 +140,12 @@ export const useReadingProgress = (novelId: string, chapterNumber: number) => {
     queryKey: ['readingProgress', novelId, chapterNumber],
     queryFn: async () => {
       const response = await api.get(
-        `${API_ENDPOINTS.NOVELS}/${novelId}/chapters/${chapterNumber}/progress`,
-        {
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODBhNzIzY2FiMjRmY2Y5MGEwOGRmOTAiLCJleHAiOjE3NDU3MzYxOTJ9.6QiNU4xYXOU4zWniFcwFORlx3f4Qu4DVHZxv3WsWF20'
-          }
-        }
+        `${API_ENDPOINTS.NOVELS}/${novelId}/chapters/${chapterNumber}/progress`
       );
       return response.data as ReadingProgress;
     },
     enabled: !!novelId && !!chapterNumber,
-    gcTime: 0, // No guardar en caché después de que la query se vuelva inactiva
+    gcTime: 0,
   });
 };
 
@@ -173,12 +157,7 @@ export const useUpdateReadingProgress = () => {
       console.log('Updating reading progress:', { novelId, chapterNumber, progress });
       const response = await api.post(
         `${API_ENDPOINTS.NOVELS}/${novelId}/chapters/${chapterNumber}/progress?progress=${progress}`,
-        {},
-        {
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODBhNzIzY2FiMjRmY2Y5MGEwOGRmOTAiLCJleHAiOjE3NDU3MzYxOTJ9.6QiNU4xYXOU4zWniFcwFORlx3f4Qu4DVHZxv3WsWF20'
-          }
-        }
+        {}
       );
       console.log('Progress update response:', response.data);
       return response.data as ReadingProgress;
@@ -214,7 +193,7 @@ export const useSources = () => {
   return useQuery({
     queryKey: ['sources'],
     queryFn: async () => {
-      const response = await api.get('/api/v1/sources/');
+      const response = await api.get(API_ENDPOINTS.SOURCES);
       return response.data;
     },
   });

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Button, TextInput, useTheme, ActivityIndicator, Menu } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useCreateNovel, useSources } from '../api/contentApi';
+import { useCreateNovel, useSources } from '../api/services/content';
 
 const AddContentScreen = ({ navigation }: { navigation: any }) => {
   const insets = useSafeAreaInsets();
